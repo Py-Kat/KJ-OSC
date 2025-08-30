@@ -45,7 +45,7 @@ while True:
             client.send_message(
                 "/chatbox/input",
                 [
-                    custom_message,
+                    f"| {custom_message}",
                     True
                 ]
             )
@@ -83,7 +83,10 @@ while True:
                 continue
 
             loops = 0
+            breaking = False
             for _ in range(loop_amount):
+                if breaking:
+                    break
                 while True:
                     try:
                         loops += 1
@@ -108,7 +111,10 @@ while True:
 
                         print(
                             Fore.YELLOW+
-                            f"\n\n| Loop Number: {loops}"
+                            f"\n\n| Loop Number: {loops} / {loop_amount}"
+                            +Fore.RED+
+                            "\n| Use CTRL+C to quit the loop."
+                            +Fore.GREEN+
                             f"\n\n| Search Term: {search_term}"
                             f"\n| URL: {response.url}"
                             +Fore.CYAN
@@ -130,6 +136,9 @@ while True:
                             +Fore.CYAN
                         )
                         continue
+                    except KeyboardInterrupt:
+                        breaking = True
+                        break
 
 
     # Hardware Info          #
@@ -157,13 +166,18 @@ while True:
                 client.send_message(
                     "/chatbox/input",
                     [
-                        f"| CPU Percent: {percentage}%"
+                        f"| CPU Usage: {percentage}%"
                         f"\n| Performance Cores: {performance_cores}"
                         f"\n| Logical Cores: {logical_cores}",
                         True
                     ]
                 )
-                input("\n\n| PRESS ENTER > ")
+                print(
+                    Fore.GREEN+
+                    "\n\n| Sent CPU Info!"
+                    +Fore.CYAN
+                )
+                sleep(1.5)
                 continue
 
 
@@ -175,13 +189,18 @@ while True:
                 client.send_message(
                     "/chatbox/input",
                     [
-                        f"| RAM Percent: {ram_percentage} %"
+                        f"| RAM Usage: {ram_percentage} %"
                         f"\n| RAM In-Use: {ram_in_use:.1f} GB"
                         f"\n| RAM Free: {ram_free:.1f} GB",
                         True
                     ]
                 )
-                input("\n\n| PRESS ENTER > ")
+                print(
+                    Fore.GREEN+
+                    "\n\n| Sent RAM Info!"
+                    +Fore.CYAN
+                )
+                sleep(1.5)
                 continue
 
 
@@ -203,8 +222,15 @@ while True:
                                 f"\n| VRAM Free: {vram_free:.1f} GB",
                             ]
                         )
-                        input("\n\n| PRESS ENTER > ")
+                        print(
+                            Fore.GREEN+
+                            "\n\n| Sent GPU Info!"
+                            +Fore.CYAN
+                        )
+                        sleep(1.5)
                         continue
+
+
                 else:
                     print(
                         Fore.RED+
