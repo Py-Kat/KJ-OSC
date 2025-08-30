@@ -5,6 +5,8 @@ import requests
 from bs4 import BeautifulSoup
 from time import sleep
 from colorama import Fore
+import psutil
+import GPUtil
 
 
 # Client          #
@@ -21,8 +23,9 @@ while True:
         "\n\n| Select an option by number!"
         "\n\n1. | Custom Message!"
         "\n2. | Random Dictionary Definitions!"
+        "\n3. | Hardware Info! ( Who cares? )"
         +Fore.RED+
-        "\n3. | Close Script!"
+        "\n4. | Close Script!"
         +Fore.CYAN+
         "\n\n> "
     )
@@ -33,7 +36,7 @@ while True:
             custom_message = input(
                 "\n\n| Enter your custom message!"
                 +Fore.YELLOW+
-                "\n| Press ENTER to return to main menu"
+                "\n| Press ENTER to return to main menu!"
                 +Fore.CYAN+
                 "\n\n> "
             )
@@ -56,7 +59,7 @@ while True:
                 loop_amount = int(input(
                     "\n\n| How many times would you like to loop?"
                     +Fore.YELLOW+
-                    "\n| Input '0' to return to main menu."
+                    "\n| Input '0' to return to main menu!"
                     +Fore.CYAN+
                     "\n\n> "
                 ))
@@ -104,30 +107,126 @@ while True:
 
 
                         print(
+                            Fore.YELLOW+
                             f"\n\n| Loop Number: {loops}"
                             f"\n\n| Search Term: {search_term}"
                             f"\n| URL: {response.url}"
+                            +Fore.CYAN
                         )
                         client.send_message(
                             "/chatbox/input",
                             [
-                                f"{search_term}: {message.text[144:0:-1]}",
+                                f"{search_term}: {message.text[0:144:1]}",
                                 True
                             ]
                         )
                         sleep(15)
                         break
-                    except AttributeError:
+                    except AttributeError as e:
                         print(
                             Fore.RED+
                             "\n\n| Attribute Error! ( This is a debug print! )"
+                            f"\n\n{e}"
                             +Fore.CYAN
                         )
                         continue
 
 
-    # Exit          #
+    # Hardware Info          #
     elif menu_prompt == "3":
+        while True:
+            hw_info_menu = input(
+                "\n\n| Select an option by number!"
+                +Fore.YELLOW+
+                "\n| Press ENTER to return to main menu!"
+                +Fore.CYAN+
+                "\n\n1. | CPU Info"
+                "\n2. | Memory Info"
+                "\n3. | GPU Info"
+                "\n\n> "
+            )
+            if hw_info_menu.strip() == "":
+                break
+
+
+            # CPU Info          #
+            elif hw_info_menu == "1":
+                percentage = psutil.cpu_percent(1)
+                performance_cores = psutil.cpu_count(False)
+                logical_cores = psutil.cpu_count() - performance_cores
+                client.send_message(
+                    "/chatbox/input",
+                    [
+                        f"| CPU Percent: {percentage}%"
+                        f"\n| Performance Cores: {performance_cores}"
+                        f"\n| Logical Cores: {logical_cores}",
+                        True
+                    ]
+                )
+                input("\n\n| PRESS ENTER > ")
+                continue
+
+
+            # RAM Info          #
+            elif hw_info_menu == "2":
+                ram_percentage = psutil.virtual_memory().percent
+                ram_in_use = psutil.virtual_memory().used / 1000000000
+                ram_free = psutil.virtual_memory().available / 1000000000
+                client.send_message(
+                    "/chatbox/input",
+                    [
+                        f"| RAM Percent: {ram_percentage} %"
+                        f"\n| RAM In-Use: {ram_in_use:.1f} GB"
+                        f"\n| RAM Free: {ram_free:.1f} GB",
+                        True
+                    ]
+                )
+                input("\n\n| PRESS ENTER > ")
+                continue
+
+
+            # GPU Info          #
+            elif hw_info_menu == "3":
+                gpus = GPUtil.getGPUs()
+                if gpus:
+                    for gpu in gpus:
+                        gpu_name = gpu.name
+                        gpu_usage = gpu.load
+                        vram_in_use = gpu.memoryUsed / 1000
+                        vram_free = gpu.memoryFree / 1000
+                        client.send_message(
+                            "/chatbox/input",
+                            [
+                                f"| GPU: {gpu_name}"
+                                f"\n| GPU Usage: {gpu_usage * 100:.1f} %"
+                                f"\n| VRAM In-Use: {vram_in_use:.1f} GB"
+                                f"\n| VRAM Free: {vram_free:.1f} GB",
+                            ]
+                        )
+                        input("\n\n| PRESS ENTER > ")
+                        continue
+                else:
+                    print(
+                        Fore.RED+
+                        "\n\n| No GPU found!"
+                        +Fore.CYAN
+                    )
+                    sleep(2)
+                    continue
+
+
+            else:
+                print(
+                    Fore.RED+
+                    "\n\n| Invalid input!"
+                    +Fore.CYAN
+                )
+                sleep(2)
+                continue
+
+
+    # Exit          #
+    elif menu_prompt == "4":
         break
 
 
