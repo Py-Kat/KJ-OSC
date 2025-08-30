@@ -27,7 +27,8 @@ while True:
         track = itunes.CurrentTrack
         duration = track.Duration
         status = (f"| {track.Name} - {track.Artist}"
-                  f"\n|| 《 {format_time(position)} / {format_time(duration)} 》")
+                  f"\n《 {format_time(position)} "
+                  f"/ {format_time(duration)} 》")
 
     elif state == 0:
         if position > 0:
@@ -40,8 +41,16 @@ while True:
         status = "Nothing Playing."
 
     if status != last_status:
-        client.send_message("/chatbox/input", [status, True, False])
-        print(f"\n\nSent To OSC:   {status}")
+        client.send_message(
+            "/chatbox/input",
+            [
+                status,
+                True, False
+            ]
+        )
+        print(
+            f"\n\nSent To OSC:   {status}"
+        )
         last_status = status
     sleep(2)
 
