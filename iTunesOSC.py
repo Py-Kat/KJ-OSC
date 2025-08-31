@@ -17,28 +17,44 @@ client = udp_client.SimpleUDPClient(
     9000
 )
 
-last_status = ""
+last_status = None
 
 while True:
-    state = itunes.PlayerState
-    position = itunes.PlayerPosition
-
-    if state == 1:
+    try:
+        state = itunes.PlayerState
         track = itunes.CurrentTrack
-        duration = track.Duration
-        status = (f"| {track.Name} - {track.Artist}"
-                  f"\n《 {format_time(position)} "
-                  f"/ {format_time(duration)} 》")
+    except Exception:
+        state = 0
+        track = None
 
-    elif state == 0:
-        if position > 0:
-            track = itunes.CurrentTrack
-            status = "Paused."
+    if track is not None:
+        try:
+            position = itunes.PlayerPosition
+        except Exception:
+            position = 0
+        duration = getattr(
+            track,
+            "Duration",
+            0
+        )
+
+        if state == 1:
+            status = (
+                f"♫ | {track.Name}"
+                f"\n👤 | {track.Artist}"
+                f"\n《 {format_time(position)} "
+                f"/ {format_time(duration)} 》"
+            )
+
+        elif state == 0 and position > 0:
+            status = "| Paused."
+
         else:
-            status = "Nothing Playing."
+            status = "| Nothing Playing."
 
     else:
-        status = "Nothing Playing."
+        status = "| Nothing Playing."
+
 
     if status != last_status:
         client.send_message(
@@ -49,9 +65,8 @@ while True:
             ]
         )
         print(
-            f"\n\nSent To OSC:   {status}"
+            f"\n\n| Sent To OSC:   {status}"
         )
         last_status = status
-    sleep(2)
 
-# todo FIX CRASH WHEN NOTHING IS IN THE PLAYER!
+    sleep(2)
