@@ -7,6 +7,7 @@ from time import sleep
 from colorama import Fore
 import psutil
 import GPUtil
+import cpuinfo
 
 
 # Client          #
@@ -166,15 +167,20 @@ while True:
 
             # CPU Info          #
             elif hw_info_menu == "1":
+                print(
+                    Fore.YELLOW+
+                    "\n\n| This takes a second..."
+                    +Fore.CYAN
+                )
+                info = cpuinfo.get_cpu_info()
                 percentage = psutil.cpu_percent(1)
-                performance_cores = psutil.cpu_count(False)
-                logical_cores = psutil.cpu_count() - performance_cores
+                cpu_cores = psutil.cpu_count()
                 client.send_message(
                     "/chatbox/input",
                     [
-                        f"| CPU Usage: {percentage}%"
-                        f"\n| Performance Cores: {performance_cores}"
-                        f"\n| Logical Cores: {logical_cores}",
+                        f"| {info["brand_raw"]}"
+                        f"\n| CPU Usage: {percentage}%"
+                        f"\n| CPU Cores: {cpu_cores}",
                         True
                     ]
                 )
@@ -192,12 +198,14 @@ while True:
                 ram_percentage = psutil.virtual_memory().percent
                 ram_in_use = psutil.virtual_memory().used / 1000000000
                 ram_free = psutil.virtual_memory().available / 1000000000
+                swap = psutil.swap_memory().total / 1000000000
                 client.send_message(
                     "/chatbox/input",
                     [
                         f"| RAM Usage: {ram_percentage} %"
                         f"\n| RAM In-Use: {ram_in_use:.1f} GB"
-                        f"\n| RAM Free: {ram_free:.1f} GB",
+                        f"\n| RAM Free: {ram_free:.1f} GB"
+                        f"\n| Swap: {swap:.1f} GB",
                         True
                     ]
                 )
@@ -222,7 +230,7 @@ while True:
                         client.send_message(
                             "/chatbox/input",
                             [
-                                f"| GPU: {gpu_name}"
+                                f"| {gpu_name}"
                                 f"\n| GPU Usage: {gpu_usage * 100:.1f} %"
                                 f"\n| VRAM In-Use: {vram_in_use:.1f} GB"
                                 f"\n| VRAM Free: {vram_free:.1f} GB",
