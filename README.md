@@ -6,8 +6,6 @@
 - Send **random dictionary prompts and their definitions**! ( Because Funny )
 - Send **hardware info** about **CPU, RAM, & GPU**!
 
----
-
 ### | Main Menu:
 
 ![ChatboxOSCMainMenu.png](images/ChatboxOSC/ChatboxOSCMainMenu.png)
@@ -56,13 +54,13 @@
 
 ![iTunesOSCStoppedINGAME.png](images/iTunesOSC/iTunesOSCStoppedINGAME.png)
 
-## Note:
-**('Paused' & 'Stopped' are only
+## | Note:
+**'Paused' & 'Stopped' are only
 sent to OSC once per
 occurence to allow the user
 to pause playback and send
 other things to OSC without
-having to close the script!)**
+having to close the script!**
 
 # | Final Note:
 Please submit any **issues** you may experience or **suggestions** you may have!
