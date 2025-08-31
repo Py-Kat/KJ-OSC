@@ -1,10 +1,5 @@
 # | Kat's VRChat OSC Scripts!
-:)
-
-## | ChatboxOSC:
-- Send a **custom message**!
-- Send **random dictionary prompts and their definitions**! ( Because Funny )
-- Send **hardware info** about **CPU, RAM, & GPU**!
+Kat's collection of Terminal UI based scripts to interact with VRChat's OSC in fun ways.
 
 ### | Main Menu:
 
@@ -31,11 +26,6 @@
 
 ![ChatboxOSCGPUInfoINGAME.png](images/ChatboxOSC/ChatboxOSCGPUInfoINGAME.png)
 
-
-## | iTunesOSC:
-- Sends **current playing song & artist** aswell as an **elapsed time**.
-- Sends a 'Paused.' message when paused & 'Nothing Playing.' when stopped!
-
 ### | Playing Music:
 
 ![iTunesOSCPlaying.png](images/iTunesOSC/iTunesOSCPlaying.png)
@@ -55,12 +45,12 @@
 ![iTunesOSCStoppedINGAME.png](images/iTunesOSC/iTunesOSCStoppedINGAME.png)
 
 ## | Note:
-**'Paused' & 'Stopped' are only
-sent to OSC once per
-occurence to allow the user
+'Paused' & 'Stopped' are only
+sent to OSC ***once per
+occurrence*** to allow the user
 to pause playback and send
 other things to OSC without
-having to close the script!**
+having to close the script!
 
-# | Final Note:
+# | FINAL Note:
 Please submit any **issues** you may experience or **suggestions** you may have!
