@@ -44,13 +44,5 @@ Kat's collection of Terminal UI based scripts to interact with VRChat's OSC in f
 
 ![iTunesOSCStoppedINGAME.png](images/iTunesOSC/iTunesOSCStoppedINGAME.png)
 
-## | Note:
-'Paused' & 'Stopped' are only
-sent to OSC ***once per
-occurrence*** to allow the user
-to pause playback and send
-other things to OSC without
-having to close the script!
-
 # | FINAL Note:
 Please submit any **issues** you may experience or **suggestions** you may have!
