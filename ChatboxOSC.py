@@ -1,6 +1,6 @@
 # Imports          #
 from pythonosc import udp_client
-from wonderwords import RandomWord
+from faker import Faker
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
@@ -97,8 +97,8 @@ while True:
                     try:
                         loops += 1
 
-                        r = RandomWord()
-                        search_term = r.word()
+                        fake = Faker()
+                        search_term = fake.word()
 
                         response = requests.get(
                             f"https://www.dictionary.com/browse/{search_term}",
