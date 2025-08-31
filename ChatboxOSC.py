@@ -23,7 +23,7 @@ while True:
         "\n\n| Select an option by number!"
         "\n\n1. | Custom Message!"
         "\n2. | Random Dictionary Definitions!"
-        "\n3. | Hardware Info! ( Who cares? )"
+        "\n3. | Hardware Info!"
         +Fore.RED+
         "\n4. | Close Script!"
         +Fore.CYAN+
@@ -49,6 +49,12 @@ while True:
                     True
                 ]
             )
+            print(
+                Fore.GREEN+
+                f"\n\n| Sent To OSC: {custom_message}"
+                +Fore.CYAN
+            )
+            sleep(2)
 
 
 
