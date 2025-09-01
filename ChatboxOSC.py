@@ -26,7 +26,7 @@ while True:
         +Fore.RED+
         "\n4. | Close Script!"
         +Fore.CYAN+
-        "\n\n> "
+        "\n\n| > "
     )
 
     # Custom Message          #
@@ -37,7 +37,7 @@ while True:
                 +Fore.YELLOW+
                 "\n| Press ENTER to return to main menu!"
                 +Fore.CYAN+
-                "\n\n> "
+                "\n\n| > "
             )
             if custom_message.strip() == "":
                 break
@@ -64,7 +64,7 @@ while True:
                     +Fore.YELLOW+
                     "\n| Input '0' to return to main menu!"
                     +Fore.CYAN+
-                    "\n\n> "
+                    "\n\n| > "
                 ))
                 if loop_amount == 0:
                     break
@@ -125,7 +125,8 @@ while True:
                             "/chatbox/input",
                             [
                                 f"{search_term}: {message.text[0:144:1]}",
-                                True
+                                True,
+                                False
                             ]
                         )
                         sleep(15)
@@ -147,7 +148,7 @@ while True:
                 "\n\n1. | CPU Info"
                 "\n2. | Memory Info"
                 "\n3. | GPU Info"
-                "\n\n> "
+                "\n\n| > "
             )
             if hw_info_menu.strip() == "":
                 break
@@ -168,7 +169,8 @@ while True:
                         f"| {info["brand_raw"]}"
                         f"\n| CPU Usage: {percentage}%"
                         f"\n| CPU Cores: {cpu_cores}",
-                        True
+                        True,
+                        False
                     ]
                 )
                 print(
@@ -192,7 +194,8 @@ while True:
                         f"\n| RAM In-Use: {ram_in_use:.1f} GB"
                         f"\n| RAM Free: {ram_free:.1f} GB"
                         f"\n| Swap: {swap:.1f} GB",
-                        True
+                        True,
+                        False
                     ]
                 )
                 print(
@@ -219,6 +222,8 @@ while True:
                                 f"\n| GPU Usage: {gpu_usage * 100:.1f} %"
                                 f"\n| VRAM In-Use: {vram_in_use:.1f} GB"
                                 f"\n| VRAM Free: {vram_free:.1f} GB",
+                                True,
+                                False
                             ]
                         )
                         print(
