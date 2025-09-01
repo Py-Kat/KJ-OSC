@@ -9,13 +9,11 @@ import psutil
 import GPUtil
 import cpuinfo
 
-
 # Client          #
 client = udp_client.SimpleUDPClient(
     "127.0.0.1",
     9000
 )
-
 
 # Main Menu          #
 while True:
@@ -56,8 +54,6 @@ while True:
                 +Fore.CYAN
             )
             sleep(2)
-
-
 
     # Random Dictionary Definitions          #
     elif menu_prompt == "2":
@@ -115,7 +111,6 @@ while True:
                             class_="TOpzjFHcRBqzUMLLKa9s"
                         )
 
-
                         print(
                             Fore.YELLOW+
                             f"\n\n| Loop Number: {loops} / {loop_amount}"
@@ -135,18 +130,11 @@ while True:
                         )
                         sleep(15)
                         break
-                    except AttributeError as e:
-                        print(
-                            Fore.RED+
-                            "\n\n| Attribute Error! ( This is a debug print! )"
-                            f"\n\n{e}"
-                            +Fore.CYAN
-                        )
+                    except AttributeError:
                         continue
                     except KeyboardInterrupt:
                         breaking = True
                         break
-
 
     # Hardware Info          #
     elif menu_prompt == "3":
@@ -163,7 +151,6 @@ while True:
             )
             if hw_info_menu.strip() == "":
                 break
-
 
             # CPU Info          #
             elif hw_info_menu == "1":
@@ -192,7 +179,6 @@ while True:
                 sleep(1.5)
                 continue
 
-
             # RAM Info          #
             elif hw_info_menu == "2":
                 ram_percentage = psutil.virtual_memory().percent
@@ -216,7 +202,6 @@ while True:
                 )
                 sleep(1.5)
                 continue
-
 
             # GPU Info          #
             elif hw_info_menu == "3":
@@ -244,7 +229,6 @@ while True:
                         sleep(1.5)
                         continue
 
-
                 else:
                     print(
                         Fore.RED+
@@ -253,7 +237,6 @@ while True:
                     )
                     sleep(2)
                     continue
-
 
             else:
                 print(
@@ -264,11 +247,9 @@ while True:
                 sleep(2)
                 continue
 
-
     # Exit          #
     elif menu_prompt == "4":
         break
-
 
     else:
         print(
