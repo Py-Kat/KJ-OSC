@@ -5,20 +5,55 @@ from time import sleep
 from colorama import Style, Fore
 from random import choice
 
-# Colors Constants
-blue = Fore.BLUE
-red = Fore.RED
-green = Fore.GREEN
-magenta = Fore.MAGENTA
-yellow = Fore.YELLOW
-cyan = Fore.CYAN
-dim = Style.DIM
-bright = Style.BRIGHT
-normal = Style.NORMAL
+# Print Rainbow          #
+def rainbow_print(text: str) -> None:
+    """Prints text in a random color!"""
+
+    # Colors
+    (
+        blue,
+        red,
+        green,
+        magenta,
+        yellow,
+        cyan,
+        dim,
+        bright,
+        normal
+     ) = (
+        Fore.BLUE,
+        Fore.RED,
+        Fore.GREEN,
+        Fore.MAGENTA,
+        Fore.YELLOW,
+        Fore.CYAN,
+        Style.DIM,
+        Style.BRIGHT,
+        Style.NORMAL
+    )
+
+    # Choose Color
+    random_color = choice([
+        red,
+        blue,
+        green,
+        yellow,
+        magenta,
+        cyan
+    ])
+
+    # Choose Style
+    random_style = choice([
+        bright,
+        dim,
+        normal
+    ])
+
+    print(random_color + random_style + text)
 
 # Format Time          #
 def format_time(seconds: float) -> str:
-    """Format seconds as M:SS"""
+    """Format seconds as M:SS!"""
     minutes = int(seconds // 60)
     secs = int(seconds % 60)
     return f"{minutes}:{secs:02d}"
@@ -38,22 +73,7 @@ client = udp_client.SimpleUDPClient(
 last_status = None
 while True:
 
-    # Randomize Console Print Colors          #
-    random_color = choice([
-        red,
-        blue,
-        green,
-        yellow,
-        magenta,
-        cyan
-    ])
-    random_style = choice([
-        bright,
-        dim,
-        normal
-    ])
-
-    # Don't crash if no music is in the player          #
+    # Prevent crash if no song is in the player          #
     try:
         state = itunes.PlayerState
         track = itunes.CurrentTrack
@@ -101,9 +121,7 @@ while True:
                 True, False
             ]
         )
-        print(
-            random_color+
-            random_style+
+        rainbow_print(
             f"\n\n| Sent To OSC:"
             f"\n\n{status}"
         )
