@@ -15,6 +15,17 @@ client = udp_client.SimpleUDPClient(
     9000
 )
 
+# Send To OSC          #
+def osc_send(where: str, text: str, pass_prompt: bool, notify: bool) -> None:
+    """Sends a message to OSC!"""
+    client.send_message(
+        where,
+        [
+            text,
+            pass_prompt,
+            notify
+        ])
+
 # Main Menu          #
 while True:
     menu_prompt = input(
@@ -41,19 +52,18 @@ while True:
             )
             if custom_message.strip() == "":
                 break
-            client.send_message(
+            osc_send(
                 "/chatbox/input",
-                [
-                    f"| {custom_message}",
-                    True
-                ]
+                f"| {custom_message}",
+                True,
+                True
             )
             print(
                 Fore.GREEN+
                 f"\n\n| Sent To OSC: {custom_message}"
                 +Fore.CYAN
             )
-            sleep(2)
+            sleep(1.5)
 
     # Random Dictionary Definitions          #
     elif menu_prompt == "2":
@@ -121,18 +131,18 @@ while True:
                             f"\n| URL: {response.url}"
                             +Fore.CYAN
                         )
-                        client.send_message(
+                        osc_send(
                             "/chatbox/input",
-                            [
-                                f"{search_term}: {message.text[0:144:1]}",
-                                True,
-                                False
-                            ]
+                            f"{search_term}: {message.text[0:144:1]}",
+                            True,
+                            False
                         )
                         sleep(15)
                         break
+
                     except AttributeError:
                         continue
+
                     except KeyboardInterrupt:
                         breaking = True
                         break
@@ -163,15 +173,13 @@ while True:
                 info = cpuinfo.get_cpu_info()
                 percentage = psutil.cpu_percent(1)
                 cpu_cores = psutil.cpu_count()
-                client.send_message(
+                osc_send(
                     "/chatbox/input",
-                    [
-                        f"| {info["brand_raw"]}"
-                        f"\n| CPU Usage: {percentage}%"
-                        f"\n| CPU Cores: {cpu_cores}",
-                        True,
-                        False
-                    ]
+                    f"| {info["brand_raw"]}"
+                    f"\n| CPU Usage: {percentage}%"
+                    f"\n| CPU Cores: {cpu_cores}",
+                    True,
+                    False
                 )
                 print(
                     Fore.GREEN+
@@ -187,16 +195,15 @@ while True:
                 ram_in_use = psutil.virtual_memory().used / 1000000000
                 ram_free = psutil.virtual_memory().available / 1000000000
                 swap = psutil.swap_memory().total / 1000000000
-                client.send_message(
+                osc_send(
                     "/chatbox/input",
-                    [
-                        f"| RAM Usage: {ram_percentage} %"
-                        f"\n| RAM In-Use: {ram_in_use:.1f} GB"
-                        f"\n| RAM Free: {ram_free:.1f} GB"
-                        f"\n| Swap: {swap:.1f} GB",
-                        True,
-                        False
-                    ]
+                    f"| RAM Usage: {ram_percentage} %"
+                    f"\n| RAM In-Use: {ram_in_use:.1f} GB"
+                    f"\n| RAM Free: {ram_free:.1f} GB"
+                    f"\n| Swap: {swap:.1f} GB",
+                    True,
+                    False
+
                 )
                 print(
                     Fore.GREEN+
@@ -215,16 +222,14 @@ while True:
                         gpu_usage = gpu.load
                         vram_in_use = gpu.memoryUsed / 1000
                         vram_free = gpu.memoryFree / 1000
-                        client.send_message(
+                        osc_send(
                             "/chatbox/input",
-                            [
-                                f"| {gpu_name}"
-                                f"\n| GPU Usage: {gpu_usage * 100:.1f} %"
-                                f"\n| VRAM In-Use: {vram_in_use:.1f} GB"
-                                f"\n| VRAM Free: {vram_free:.1f} GB",
-                                True,
-                                False
-                            ]
+                            f"| {gpu_name}"
+                            f"\n| GPU Usage: {gpu_usage * 100:.1f} %"
+                            f"\n| VRAM In-Use: {vram_in_use:.1f} GB"
+                            f"\n| VRAM Free: {vram_free:.1f} GB",
+                            True,
+                            False
                         )
                         print(
                             Fore.GREEN+
