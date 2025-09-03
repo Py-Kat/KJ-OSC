@@ -187,8 +187,8 @@ while True:
                 cpu_cores = psutil.cpu_count()
                 osc_send(
                     "/chatbox/input",
-                    f"| CPU Name: {name}"
-                    f"\n\n| CPU Usage: {percentage}%"
+                    f"| {name}"
+                    f"\n| CPU Usage: {percentage}%"
                     f"\n| CPU Cores: {cpu_cores}",
                     True,
                     False
