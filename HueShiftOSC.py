@@ -63,7 +63,7 @@ while True:
 
         input(
             Fore.RED+
-            "\n\n| Use CTRL+C to stop the script!"
+            "\n\n| Use CTRL+C to stop the script at any point!"
             +Style.RESET_ALL+
             "\n\n| PRESS ENTER TO BEGIN! > "
         )
