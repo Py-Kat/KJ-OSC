@@ -7,13 +7,14 @@ from time import sleep
 from colorama import Fore
 import psutil
 import GPUtil
-import cpuinfo
+import winreg
 
 # Client          #
 client = udp_client.SimpleUDPClient(
     "127.0.0.1",
     9000
 )
+
 
 # Send To OSC          #
 def osc_send(where: str, text: str, pass_prompt: bool, notify: bool) -> None:
@@ -25,6 +26,17 @@ def osc_send(where: str, text: str, pass_prompt: bool, notify: bool) -> None:
             pass_prompt,
             notify
         ])
+
+
+# Get CPU Info
+def get_cpu_name():
+    key = winreg.OpenKey(
+        winreg.HKEY_LOCAL_MACHINE,
+        r"HARDWARE\DESCRIPTION\System\CentralProcessor\0"
+    )
+    cpu_name = winreg.QueryValueEx(key, "ProcessorNameString")
+    return cpu_name
+
 
 # Main Menu          #
 while True:
@@ -170,13 +182,13 @@ while True:
                     "\n\n| This takes a second..."
                     +Fore.CYAN
                 )
-                info = cpuinfo.get_cpu_info()
+                name = get_cpu_name()
                 percentage = psutil.cpu_percent(1)
                 cpu_cores = psutil.cpu_count()
                 osc_send(
                     "/chatbox/input",
-                    f"| {info["brand_raw"]}"
-                    f"\n| CPU Usage: {percentage}%"
+                    f"| CPU Name: {name}"
+                    f"\n\n| CPU Usage: {percentage}%"
                     f"\n| CPU Cores: {cpu_cores}",
                     True,
                     False
