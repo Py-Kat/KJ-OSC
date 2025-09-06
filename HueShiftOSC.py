@@ -24,6 +24,8 @@ while True:
         +Fore.YELLOW+
         "\n| Exact parameter name can be found following this path:"
         "\n| AppData > LocalLow > VRChat > VRChat > OSC > usr_(id) > Avatars"
+        +Fore.RED+
+        "\n| NOTE: THE 'OSC' FOLDER WILL NOT EXIST IF OSC IS DISABLED IN-GAME!"
         +Style.RESET_ALL+
         "\n\n| > "
     )
