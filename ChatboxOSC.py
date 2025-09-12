@@ -83,13 +83,9 @@ while True:
         breaking = False
 
         stop = Event()
-        keyboard.add_hotkey(
-            "shift+q",
-            lambda: stop.set(),
-            suppress=True
-        )
 
         while True:
+            stop.clear()
             if breaking:
                 break
             try:
@@ -127,57 +123,66 @@ while True:
                 "\n\nENTER to proceed > "
             )
 
+            keyboard.add_hotkey(
+                "shift+q",
+                lambda: stop.set(),
+                suppress=True
+            )
+
             loops = 0
             try:
                 while not stop.is_set():
-                    for _ in range(loop_amount):
-                        while True:
+                    try:
+                        for _ in range(loop_amount):
+                            while True:
 
-                            if stop.is_set():
-                                breaking = True
-                                break
+                                if stop.is_set():
+                                    breaking = True
+                                    break
 
-                            try:
-                                loops += 1
+                                try:
+                                    loops += 1
 
-                                fake = Faker()
-                                search_term = fake.word()
+                                    fake = Faker()
+                                    search_term = fake.word()
 
-                                response = requests.get(
-                                    f"https://www.dictionary.com/browse/{search_term}",
-                                    headers={"User-Agent": "Mozilla/5.0"}
-                                )
+                                    response = requests.get(
+                                        f"https://www.dictionary.com/browse/{search_term}",
+                                        headers={"User-Agent": "Mozilla/5.0"}
+                                    )
 
-                                soup = BeautifulSoup(
-                                    response.text,
-                                    "html.parser"
-                                )
-                                message = soup.find(
-                                    "li",
-                                    class_="TOpzjFHcRBqzUMLLKa9s"
-                                )
+                                    soup = BeautifulSoup(
+                                        response.text,
+                                        "html.parser"
+                                    )
+                                    message = soup.find(
+                                        "li",
+                                        class_="TOpzjFHcRBqzUMLLKa9s"
+                                    )
 
-                                print(
-                                    Fore.YELLOW+
-                                    f"\n\n| Loop Number: {loops} / {loop_amount}"
-                                    +Fore.RED+
-                                    "\n| Use SHIFT+Q to quit the loop."
-                                    +Fore.GREEN+
-                                    f"\n\n| Search Term: {search_term}"
-                                    f"\n| URL: {response.url}"
-                                    +Fore.CYAN
-                                )
-                                osc_send(
-                                    "/chatbox/input",
-                                    f"{search_term}: {message.text[0:144:1]}",
-                                    True,
-                                    False
-                                )
-                                sleep(15)
-                                break
+                                    print(
+                                        Fore.YELLOW+
+                                        f"\n\n| Loop Number: {loops} / {loop_amount}"
+                                        +Fore.RED+
+                                        "\n| Use SHIFT+Q to quit the loop."
+                                        +Fore.GREEN+
+                                        f"\n\n| Search Term: {search_term}"
+                                        f"\n| URL: {response.url}"
+                                        +Fore.CYAN
+                                    )
+                                    osc_send(
+                                        "/chatbox/input",
+                                        f"{search_term}: {message.text[0:144:1]}",
+                                        True,
+                                        False
+                                    )
+                                    sleep(15)
+                                    break
 
-                            except AttributeError:
-                                continue
+                                except AttributeError:
+                                    continue
+                    finally:
+                        stop.set()
             finally:
                 keyboard.remove_all_hotkeys()
 
