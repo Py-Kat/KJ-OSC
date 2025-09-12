@@ -70,16 +70,32 @@ client = udp_client.SimpleUDPClient(
     9000
 )
 
-input(
-    Fore.RED+
-    "\n\n| Use SHIFT+Q to quit the script while running!"
+stop = Event()
+
+key = input(
+    "\n\n| Please choose the KEYBOARD KEY you would like to temporarily bind as the 'quit' key!"
+    +Fore.YELLOW+
+    "\n\n| To avoid possible errors, please only use a letter key for now! ( Ex. 'q' will be SHIFT+Q )"
+    "\n| The first character in this input is what will be used! ( Ex. 'qwerty' will still be SHIFT+Q! )"
     +Style.RESET_ALL+
-    "\n\n| PRESS ENTER TO BEGIN! > "
+    "\n\n| > "
 )
 
-stop = Event()
+bound_key = key[:1:]
+
+print(
+    Fore.RED+
+    f"\n\n| Use SHIFT+{bound_key.upper()} to quit the script while running!"
+    +Style.RESET_ALL+
+    "\n\n| Press SPACEBAR to begin! ( Ex. 'q' )\n"
+)
+keyboard.wait(
+    "space",
+    suppress=True
+)
+
 keyboard.add_hotkey(
-    "shift+q",
+    f"shift+{bound_key}",
     lambda: stop.set(),
     suppress=True
 )
@@ -147,6 +163,5 @@ try:
             last_status = status
 
         sleep(2) # Status Update Delay          #
-
 finally:
     keyboard.remove_all_hotkeys()

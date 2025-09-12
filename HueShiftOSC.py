@@ -13,13 +13,7 @@ client = udp_client.SimpleUDPClient(
 parameter = None
 delay = 0
 breaking = None
-
 stop = Event()
-keyboard.add_hotkey(
-    "shift+q",
-    lambda: stop.set(),
-    suppress=True
-)
 
 while True:
 
@@ -28,12 +22,11 @@ while True:
 
     parameter = input(
         "\n\n| Enter the name of your avatar's hue shift parameter."
-        +Fore.RED+
-        "\n\n| Parameter name MUST be exact!"
         +Fore.YELLOW+
-        "\n| Exact parameter name can be found following this path:"
+        "\n\n| Exact parameter name can be found following this path:"
         "\n| AppData > LocalLow > VRChat > VRChat > OSC > usr_(id) > Avatars"
         +Fore.RED+
+        "\n\n| Parameter name MUST be exact!"
         "\n| NOTE: THE 'OSC' FOLDER WILL NOT EXIST IF OSC IS DISABLED IN-GAME!"
         +Style.RESET_ALL+
         "\n\n| > "
@@ -59,6 +52,7 @@ while True:
             "\n\n| Enter the delay of which the hue will shift."
             +Fore.YELLOW+
             "\n\n| Or input '0' for random delays!"
+            "\n\n| This is in seconds! ( Ex. '1' will be 1 second between loops! )"
             +Style.RESET_ALL+
             "\n\n| > "
         ))
@@ -72,11 +66,32 @@ while True:
             sleep(2)
             continue
 
-        input(
+        key = input(
+            "\n\n| Please choose the KEYBOARD KEY you would like to temporarily bind as the 'quit' key!"
+            + Fore.YELLOW +
+            "\n\n| To avoid possible errors, please only use a letter key for now! ( Ex. 'q' will be SHIFT+Q )"
+            "\n| The first character in this input is what will be used! ( Ex. 'qwerty' will still be SHIFT+Q! )"
+            + Style.RESET_ALL +
+            "\n\n| > "
+        )
+
+        bound_key = key[:1:]
+
+        print(
             Fore.RED+
-            "\n\n| Use SHIFT+Q to quit the script at any point!"
+            f"\n\n| Use SHIFT+{bound_key.upper()} to quit the script at any point!"
             +Style.RESET_ALL+
-            "\n\n| PRESS ENTER TO BEGIN! > "
+            "\n\n| Press SPACEBAR to begin! ( Ex. 'q' )\n"
+        )
+        keyboard.wait(
+            "space",
+            suppress=True
+        )
+
+        keyboard.add_hotkey(
+            f"shift+{bound_key}",
+            lambda: stop.set(),
+            suppress=True
         )
 
         if delay == 0:
@@ -100,7 +115,6 @@ while True:
                             +Style.RESET_ALL
                         )
                         sleep(delay)
-
             finally:
                 keyboard.remove_all_hotkeys()
 

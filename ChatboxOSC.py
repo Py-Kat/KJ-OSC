@@ -80,10 +80,8 @@ while True:
 
     # Random Dictionary Definitions          #
     elif menu_prompt == "2":
-        breaking = False
-
         stop = Event()
-
+        breaking = False
         while True:
             stop.clear()
             if breaking:
@@ -115,16 +113,31 @@ while True:
                 sleep(2)
                 continue
 
-            input(
+            user_key = input(
+                "\n\n| Please choose the KEYBOARD KEY you would like to temporarily bind as the 'quit' key!"
+                + Fore.YELLOW +
+                "\n\n| To avoid possible errors, please only use a letter key for now! ( Ex. 'q' will be SHIFT+Q )"
+                "\n| The first character in this input is what will be used! ( Ex. 'qwerty' will still be SHIFT+Q! )"
+                + Style.RESET_ALL +
+                "\n\n| > "
+            )
+
+            bound_key = user_key[:1:]
+
+            print(
                 Fore.RED+
-                "\n\n| Use SHIFT+Q to quit the loop!"
-                "\n( For now, there is a delay to this. )"
+                f"\n\n| Use SHIFT+{bound_key.upper()} to quit the loop!"
+                "\n( For now, there is quite a delay to this. )"
                 +Style.RESET_ALL+
-                "\n\nENTER to proceed > "
+                "\n\n| Press SPACEBAR to begin! ( Ex. 'q' )\n"
+            )
+            keyboard.wait(
+                "space",
+                suppress=True
             )
 
             keyboard.add_hotkey(
-                "shift+q",
+                f"shift+{bound_key}",
                 lambda: stop.set(),
                 suppress=True
             )
@@ -164,7 +177,7 @@ while True:
                                         Fore.YELLOW+
                                         f"\n\n| Loop Number: {loops} / {loop_amount}"
                                         +Fore.RED+
-                                        "\n| Use SHIFT+Q to quit the loop."
+                                        f"\n| Use SHIFT+{bound_key.upper()} to quit the loop."
                                         +Fore.GREEN+
                                         f"\n\n| Search Term: {search_term}"
                                         f"\n| URL: {response.url}"
