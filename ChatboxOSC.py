@@ -1,13 +1,14 @@
-# Imports          #
 from pythonosc import udp_client
 from faker import Faker
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
-from colorama import Fore
+from colorama import Style, Fore
 import psutil
 import GPUtil
 import winreg
+import keyboard
+from threading import Event
 
 # Client          #
 client = udp_client.SimpleUDPClient(
@@ -79,7 +80,18 @@ while True:
 
     # Random Dictionary Definitions          #
     elif menu_prompt == "2":
+        breaking = False
+
+        stop = Event()
+        keyboard.add_hotkey(
+            "shift+q",
+            lambda: stop.set(),
+            suppress=True
+        )
+
         while True:
+            if breaking:
+                break
             try:
                 loop_amount = int(input(
                     "\n\n| How many times would you like to loop?"
@@ -107,57 +119,67 @@ while True:
                 sleep(2)
                 continue
 
+            input(
+                Fore.RED+
+                "\n\n| Use SHIFT+Q to quit the loop!"
+                "\n( For now, there is a delay to this. )"
+                +Style.RESET_ALL+
+                "\n\nENTER to proceed > "
+            )
+
             loops = 0
-            breaking = False
-            for _ in range(loop_amount):
-                if breaking:
-                    break
-                while True:
-                    try:
-                        loops += 1
+            try:
+                while not stop.is_set():
+                    for _ in range(loop_amount):
+                        while True:
 
-                        fake = Faker()
-                        search_term = fake.word()
+                            if stop.is_set():
+                                breaking = True
+                                break
 
-                        response = requests.get(
-                            f"https://www.dictionary.com/browse/{search_term}",
-                            headers={"User-Agent": "Mozilla/5.0"}
-                        )
+                            try:
+                                loops += 1
 
-                        soup = BeautifulSoup(
-                            response.text,
-                            "html.parser"
-                        )
-                        message = soup.find(
-                            "li",
-                            class_="TOpzjFHcRBqzUMLLKa9s"
-                        )
+                                fake = Faker()
+                                search_term = fake.word()
 
-                        print(
-                            Fore.YELLOW+
-                            f"\n\n| Loop Number: {loops} / {loop_amount}"
-                            +Fore.RED+
-                            "\n| Use CTRL+C to quit the loop."
-                            +Fore.GREEN+
-                            f"\n\n| Search Term: {search_term}"
-                            f"\n| URL: {response.url}"
-                            +Fore.CYAN
-                        )
-                        osc_send(
-                            "/chatbox/input",
-                            f"{search_term}: {message.text[0:144:1]}",
-                            True,
-                            False
-                        )
-                        sleep(15)
-                        break
+                                response = requests.get(
+                                    f"https://www.dictionary.com/browse/{search_term}",
+                                    headers={"User-Agent": "Mozilla/5.0"}
+                                )
 
-                    except AttributeError:
-                        continue
+                                soup = BeautifulSoup(
+                                    response.text,
+                                    "html.parser"
+                                )
+                                message = soup.find(
+                                    "li",
+                                    class_="TOpzjFHcRBqzUMLLKa9s"
+                                )
 
-                    except KeyboardInterrupt:
-                        breaking = True
-                        break
+                                print(
+                                    Fore.YELLOW+
+                                    f"\n\n| Loop Number: {loops} / {loop_amount}"
+                                    +Fore.RED+
+                                    "\n| Use SHIFT+Q to quit the loop."
+                                    +Fore.GREEN+
+                                    f"\n\n| Search Term: {search_term}"
+                                    f"\n| URL: {response.url}"
+                                    +Fore.CYAN
+                                )
+                                osc_send(
+                                    "/chatbox/input",
+                                    f"{search_term}: {message.text[0:144:1]}",
+                                    True,
+                                    False
+                                )
+                                sleep(15)
+                                break
+
+                            except AttributeError:
+                                continue
+            finally:
+                keyboard.remove_all_hotkeys()
 
     # Hardware Info          #
     elif menu_prompt == "3":

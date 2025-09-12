@@ -1,6 +1,7 @@
-# Imports          #
 from pythonosc import udp_client
 import win32com.client
+import keyboard
+from threading import Event
 from time import sleep
 from colorama import Style, Fore
 from random import choice
@@ -71,15 +72,25 @@ client = udp_client.SimpleUDPClient(
 
 input(
     Fore.RED+
-    "\n\n| Use CTRL+C to stop the script at any point!"
+    "\n\n| Use SHIFT+Q to quit the script while running!"
     +Style.RESET_ALL+
     "\n\n| PRESS ENTER TO BEGIN! > "
 )
 
+stop = Event()
+keyboard.add_hotkey(
+    "shift+q",
+    lambda: stop.set(),
+    suppress=True
+)
+
 # Main Loop          #
 last_status = None
-while True:
-    try:
+try:
+    while not stop.is_set():
+
+        if stop.is_set():
+            break
 
         # Prevent crash if no song is in the player          #
         try:
@@ -136,5 +147,6 @@ while True:
             last_status = status
 
         sleep(2) # Status Update Delay          #
-    except KeyboardInterrupt:
-        break
+
+finally:
+    keyboard.remove_all_hotkeys()

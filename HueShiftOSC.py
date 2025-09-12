@@ -2,6 +2,8 @@ from pythonosc import udp_client
 from colorama import Style, Fore
 from random import uniform
 from time import sleep
+import keyboard
+from threading import Event
 
 client = udp_client.SimpleUDPClient(
     "127.0.0.1",
@@ -11,6 +13,13 @@ client = udp_client.SimpleUDPClient(
 parameter = None
 delay = 0
 breaking = None
+
+stop = Event()
+keyboard.add_hotkey(
+    "shift+q",
+    lambda: stop.set(),
+    suppress=True
+)
 
 while True:
 
@@ -65,46 +74,56 @@ while True:
 
         input(
             Fore.RED+
-            "\n\n| Use CTRL+C to stop the script at any point!"
+            "\n\n| Use SHIFT+Q to quit the script at any point!"
             +Style.RESET_ALL+
             "\n\n| PRESS ENTER TO BEGIN! > "
         )
 
         if delay == 0:
-            while True:
-                try:
-                    delay = uniform(0.1, 1.5)
-                    number = uniform(0, 1)
-                    client.send_message(
-                        f"/avatar/parameters/{parameter}",
-                        number
-                    )
-                    print(
-                        f"\n\n| Value Sent: {number:.2f}"
-                        +Fore.YELLOW+
-                        f"\n| Delay: {delay:.2f} Seconds"
-                        +Style.RESET_ALL
-                    )
-                    sleep(delay)
-                except KeyboardInterrupt:
-                    breaking = True
-                    break
+            try:
+                while not stop.is_set():
+                    while True:
+                        if stop.is_set():
+                            breaking = True
+                            break
+
+                        delay = uniform(0.1, 1.5)
+                        number = uniform(0, 1)
+                        client.send_message(
+                            f"/avatar/parameters/{parameter}",
+                            number
+                        )
+                        print(
+                            f"\n\n| Value Sent: {number:.2f}"
+                            +Fore.YELLOW+
+                            f"\n| Delay: {delay:.2f} Seconds"
+                            +Style.RESET_ALL
+                        )
+                        sleep(delay)
+
+            finally:
+                keyboard.remove_all_hotkeys()
 
         else:
-            while True:
-                try:
-                    number = uniform(0, 1)
-                    client.send_message(
-                        f"/avatar/parameters/{parameter}",
-                        number
-                    )
-                    print(
-                        f"\n\n| Value Sent: {number:.2f}"
-                    )
-                    sleep(delay)
-                except KeyboardInterrupt:
-                    breaking = True
-                    break
+            try:
+                while not stop.is_set():
+                    while True:
+                        if stop.is_set():
+                            breaking = True
+                            break
+
+                        number = uniform(0, 1)
+                        client.send_message(
+                            f"/avatar/parameters/{parameter}",
+                            number
+                        )
+                        print(
+                            f"\n\n| Value Sent: {number:.2f}"
+                        )
+                        sleep(delay)
+
+            finally:
+                keyboard.remove_all_hotkeys()
 
     except ValueError:
         print(
