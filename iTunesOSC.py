@@ -157,7 +157,7 @@ try:
                 ]
             )
             rainbow_print(
-                f"\n\n| Sent To OSC:"
+                f"\n\n| SHIFT+{bound_key.upper()} TO CLOSE!"
                 f"\n\n{status}"
             )
             last_status = status
